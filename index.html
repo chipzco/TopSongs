@@ -1,13 +1,183 @@
 <!doctype html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="topSongs">
 <head>
   <meta charset="utf-8">
   <title>Angular Top Songs</title>
   <script src="node_modules/angular/angular.js"></script>
+  <script src="node_modules/angular-spotify/src/angular-spotify.js"></script>
+  <script src="app/app.js"></script>
+  <script src="app/directives/showTrackDetails.js"></script>
+  <script src="app/services/playlistService.js"></script>  
+  <script src="app/controllers/indexController.js"></script>  
+  <link href="assets/main.css" rel="stylesheet">
+  <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">   
+  <link href="node_modules/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
 </head>
-<body>
-
-<h1>Nothing here {{'yet' + '!'}}</h1>
-
+<body ng-controller="indexController">  
+	  
+	 <div class="container" >
+	  <h1>Create your own personal Top 10 Playlist Music From Spotify!</h1>
+	  	
+	  	<a ng-click="hidePlaylist=false" ng-show="hidePlaylist">Show Playlist</a>	
+	  	<div ng-hide="hidePlaylist" class="playlistContainer">	  	
+	  		<h3 ng-bind="myPlayList.title"></h3>
+	  			<a ng-click="hidePlaylist=true">Hide This Playlist</a></span>
+	  			<span  ng-show="!showEdit">	  					  			
+	  				<input type="button" value="Change Name" ng-click="showEdit=true" />
+	  				<input type="button" value="EXPORT" ng-click="showExport=true" />	  				
+	  			</span>	
+	  			
+	  			
+	  			
+	  			<br/>
+	  			
+	  			
+	  			<span  ng-show="showEdit">	  			
+	  				<input type="text" id="title" ng-model="myPlayList.title"  />
+	  				<input type="button" value="SAVE" ng-click="showEdit=false" />
+	  			</span>
+	  				  			
+	  		<ul>
+	  			<li ng-repeat="song in myPlayList.songs track by $index"" class="media">
+	  				<show-track-details track-info="song" fn-modify-playlist="removeFromPlayList(track)" is-play-list="yes"></show-track-details>
+	  			</li>
+	  		</ul>	  		 
+	  	</div>
+	  
+	  	<div class="row" ng-show="showExport">
+	  		<input type="button" value="CLOSE" ng-click="showExport=false" />
+	  		<pre>{{myPlayList | json }}</pre>	
+	  	
+	  	</div>
+	  
+		  <div class="row" ng-show="!showExport">
+		  	
+		  	<!--  simple menu  -->
+		  	<div class="col-md-2">
+		  		<ul class="nav nav-pills nav-stacked">
+		       	<li ng-class="{ active: isSet(1) }">
+		          	<a href ng-click="setTab(1)">Search by Artist</a>
+		       	</li>
+		       	<li ng-class="{ active: isSet(2) }">
+		          	<a href ng-click="setTab(2)">Search by Album</a>
+		       	</li>
+		       	<li ng-class="{ active: isSet(3) }">
+		          	<a href ng-click="setTab(3)">Search by Song Name</a>
+		       	</li>
+		     	</ul>
+		  	</div>		  			  	
+		  	
+		  	
+		  <!--  ***************      ARTIST TAB ********************************    -->	
+		  	
+		    <div class="col-md-8">
+		  		<div class="jumbotron">
+		       	<div ng-show="isSet(1)">
+		         	 <h3>Search By Artist</h3>
+				  <div>	         	 
+		         	 <input type="text" ng-model="searchartist" ng-change="searchArtist()" placeholder="Search for an artist" />
+		         	 
+		         	 <div ng-show="isSetArtistAlbumMode(1)">		         	 
+					  	 <ul ng-show="isSetArtistAlbumMode(1)">
+						    <li ng-repeat="artist in artists">
+						    	<a ng-click="getArtistAlbums(artist.id)">
+							      <div class="media" >
+							      	 <img ng-src="{{artist.images[0].url}}" alt=""/>					     
+							        <div class="media-details">
+							          {{artist.name}}
+							        </div>
+							      </div>  
+							     </a>  
+						    </li>
+						  </ul>
+					  </div>	  
+					  <div ng-show="isSetArtistAlbumMode(2)">
+					  	 <a ng-click="setArtistAlbumMode(1)">Back to Artist Search Results</a> 	
+						  <ul>					  						  	
+						    <li ng-repeat="album in artistAlbums">	
+							    <a ng-click="getArtistAlbumTracks(album.id)">					     	
+							      <div class="media" target="_blank">
+							      	 <img ng-src="{{album.images[0].url}}" alt=""/>					     
+								      <div class="media-details">
+								         {{album.name}}
+								       </div>
+							       </div>
+							      </a> 						       
+						    </li>					    
+						  </ul>  
+					  </div>
+					  
+					   <div ng-show="isSetArtistAlbumMode(3)">
+					  	 <a ng-click="setArtistAlbumMode(1)">Back to Artist Search Results</a> 	
+					  	 <a ng-click="setArtistAlbumMode(2)">Back to Artist Album</a>
+						  <ul>					  						  	
+						    <li ng-repeat="song in artistAlbumTracks">	
+							    <show-track-details track-info="song" fn-modify-playlist="addToPlayList(track)" isPlayList="no"></show-track-details>							    						       
+						    </li>					    
+						  </ul>  
+					  </div>				  
+					  
+					  
+		          </div>		          
+		        </div>
+		        
+		        
+		        
+		        <!--  ***************      ALBUM  TAB ********************************    -->
+		        
+		        
+				<div ng-show="isSet(2)">
+		          <h3>Search By Album</h3>
+		          <div>	         	 
+		         	 <input type="text" ng-model="searchalbum" ng-change="searchAlbum()" placeholder="Search for an album" />
+		         	 
+		         	
+					  <div ng-show="showAlbumList">					  	  	
+						  <ul>					  						  	
+						    <li ng-repeat="album in albums">	
+							    <a ng-click="getAlbumTracks(album.id)">					     	
+							      <div class="media" target="_blank">
+							      	 <img ng-src="{{album.images[0].url}}" alt=""/>					     
+								      <div class="media-details">
+								         {{album.name}}
+								       </div>
+							       </div>
+							      </a> 						       
+						    </li>					    
+						  </ul>  
+					  </div>
+					  
+					   <div ng-show="!showAlbumList">
+					  	 <a ng-click="showAlbumList=true">Back to Album Search Results</a>					  	 
+						  <ul>					  						  	
+						    <li ng-repeat="track in albumTracks">
+						    	<show-track-details track-info="track" fn-modify-playlist="addToPlayList(track)" isPlayList="no" ></show-track-details>						    									  							     							     						       
+						    </li>					    
+						  </ul>  
+					  </div>					  
+		          </div>
+		     	</div> 	
+		     	
+		        
+		        <div ng-show="isSet(3)">
+		          <h3>Search By Track</h3>
+		          <div>
+		          	 <input type="text" ng-model="searchtrack" ng-change="searchTrack()" placeholder="Search for a track" />
+		          	 
+		          	  <ul>					  						  	
+						 <li ng-repeat="track in tracks">
+						   	<show-track-details track-info="track" fn-modify-playlist="addToPlayList(track)" isPlayList="no" ></show-track-details>						    									  							     							     						       
+						 </li>					    
+					  </ul>  
+		          	 
+		          </div>		       	
+		     	</div>
+		     	
+		     	
+		  	</div>
+		  </div>
+		</div>
+	 </div> 
+	  
 </body>
 </html>

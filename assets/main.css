@@ -1,0 +1,43 @@
+ ul {
+      list-style: none;
+    }
+    .media {
+      display: table;
+      width: 100%;
+    }
+    .media img {
+      display: table-cell;
+      max-width: 100%;
+    }
+    .media-details {
+      padding-left: 1em;
+      vertical-align: middle;
+      display: table-cell;
+      width: 90%;
+    }
+    body {
+  	margin: 15px;
+	}
+
+	/* text recolor */
+	p, a {
+  		color: #800040!important;
+	}
+	h1 {
+		color: #800040;
+		font-size: 14px;
+	}
+
+	/* button recolor */
+	.nav-pills > li.active > a, .btn-primary {
+   		background-color: #c0c0c0 !important;  
+  		border-color: #c0c0c0!important;
+  		border-radius: 25px; 
+	}	
+ 	
+	.playlistContainer {
+		
+		background-color:#EEFFFF;
+		
+	}
+	

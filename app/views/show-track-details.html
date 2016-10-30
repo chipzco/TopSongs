@@ -1,0 +1,43 @@
+<div class="media-details">		     	
+						     
+	<span>
+		<a target="_blank" href="{{trackInfo.preview_url}}" alt="Preview song">{{trackInfo.name}}</a>	
+	</span>
+	
+	by  
+	<span ng-if="isPlayList!='yes'">
+		{{trackInfo.artists[0].name}}		
+	</span>
+	<span ng-if="isPlayList=='yes'">
+		{{trackInfo.artist}}		
+	</span>
+	
+	<span>Track {{trackInfo.track_number}}</span>
+	
+	<span ng-if="isPlayList!='yes'"><input type="button" ng-click="fnModifyPlaylist({track:trackInfo})" value="Add To Playlist" /></span>
+	
+	 												
+	<span ng-if="isPlayList=='yes'" >
+	
+		<span ng-show="!showEditSong">
+			<span><img ng-src="{{trackInfo.customImage}}"  class="media img" /></span>			
+		  	<span>{{trackInfo.note}}</span>   		  	
+		  	<input type="button" ng-click="showEditSong=true" value="Add/edit note/url" />
+		</span>
+	
+	
+		<input type="button" ng-click="fnModifyPlaylist({track:trackInfo})" value="Remove" />
+		
+		
+		<span ng-show="showEditSong">
+			<span>
+				Note: <input type="text" ng-model="trackInfo.note" />
+			</span>
+			<span>
+				Custom Image URL <input type="text" ng-model="trackInfo.customImage" />
+			</span>
+			<input type="button" value="save" ng-click="showEditSong=false" />	
+		</span>
+	</span>
+</div>
+			
