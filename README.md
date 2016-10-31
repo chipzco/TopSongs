@@ -1,7 +1,9 @@
 # Angular Top Songs
 
 Thanks for taking the time to take our challenge. We're hoping you can prove that you're able to follow a few guidelines and deliver a simple, yet full featured application.
+Link to URL:
 
+http://computerwebservices.net/TopSongs/ 
  
 ##Goals
 We're hoping to learn more about your dev style and preferences. 
