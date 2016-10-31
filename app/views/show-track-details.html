@@ -19,8 +19,8 @@
 	 												
 	<span ng-if="isPlayList=='yes'" >
 	
-		<span ng-show="!showEditSong">
-			<span><img ng-src="{{trackInfo.customImage}}"  class="media img" /></span>			
+		<span ng-show="!showEditSong" class="media">
+			<span><img ng-src="{{trackInfo.customImage}}" class="img"  /></span>			
 		  	<span>{{trackInfo.note}}</span>   		  	
 		  	<input type="button" ng-click="showEditSong=true" value="Add/edit note/url" />
 		</span>

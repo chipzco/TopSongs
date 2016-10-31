@@ -5,9 +5,10 @@
       display: table;
       width: 100%;
     }
-    .media img {
-      display: table-cell;
-      max-width: 100%;
+    .img  {
+      display: inline;
+      width: 20%;
+      height: 20%;      
     }
     .media-details {
       padding-left: 1em;
